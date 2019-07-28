@@ -1,0 +1,22 @@
+---
+
+version: "3.3"
+
+networks:
+    tenants:
+        driver: bridge
+
+services:
+    postgres:
+        image:
+
+        ports:
+            - "3306:3306:
+
+    tenants-api:
+        image: tapis/tenants-api
+        ports:
+            - "5000:5000"
+        depends_on:
+            - postgres
+
