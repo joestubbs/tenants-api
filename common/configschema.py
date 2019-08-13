@@ -33,7 +33,7 @@ base_schema = [
         "values": ["DEBUG", "INFO", "WARN", "ERROR", "CRITICAL"]
     },
     {
-        "name": "loge_file",
+        "name": "log_file",
         "typ": str,
         "required": False,
         "description": "location of log file.",

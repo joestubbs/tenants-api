@@ -13,4 +13,4 @@ USER tapis
 
 # ----API specific code
 ENV TAPIS_API tenants
-COPY tenants /home/tapis/service
+COPY service /home/tapis/service
