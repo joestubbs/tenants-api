@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$id": "http://github.com/tapis-project/tapisflask/schemas/configschema.json",
+  "type": "object",
+  "properties": {
+    "sever": {
+      "type": "string",
+      "pattern": "dev|prod",
+      "default": "prod",
+      "description": "configures whether to run the development server or the production server."
+    },
+    "service_name": {
+      "type": "string",
+      "description": "The name of the service, such as 'apps', 'jobs', etc."
+    },
+    "log_level": {
+      "type": "string",
+      "pattern": "DEBUG|INFO|WARN|ERROR|CRITICAL",
+      "default": "ERROR",
+      "description": "the logging level to use for the service. "
+    },
+    "log_file": {
+      "type": "string",
+      "default": "home/tapis/service.log",
+      "description": "location of log file."
+    }
+  },
+  "required": ["service_name"]
+}

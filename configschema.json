@@ -1,0 +1,11 @@
+{
+  "$id": "http://github.com/tapis-project/tenants-api/tenants-api/configschema.json",
+  "$schema": "http://json-schema.org/schema#",
+  "properties": {
+    "jwt_private_key": {
+      "type": "string",
+      "description": "The name of the service, such as 'apps', 'jobs', etc."
+    },
+  "required": ["jwt_private_key"]
+  }
+}

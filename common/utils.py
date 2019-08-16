@@ -5,7 +5,7 @@ from flask import jsonify, request
 from werkzeug.exceptions import ClientDisconnected
 from flask_restful import Api
 
-from .config import Config
+from .config2 import Config
 from .errors import BaseTapisError
 
 
