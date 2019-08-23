@@ -6,6 +6,11 @@
       "type": "string",
       "description": "The name of the service, such as 'apps', 'jobs', etc."
     },
+    "postgres_url": {
+      "type": "string",
+      "default": "postgres://tenants:d3fd6pAssw0rd/postgres/tenants",
+      "description": "The fully qualified URL, including protocol, auth, and db name, to use for the postgres db."
+    },
   "required": ["jwt_private_key"]
   }
 }

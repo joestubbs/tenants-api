@@ -3,7 +3,7 @@
   "$id": "http://github.com/tapis-project/tapisflask/schemas/configschema.json",
   "type": "object",
   "properties": {
-    "sever": {
+    "server": {
       "type": "string",
       "pattern": "dev|prod",
       "default": "prod",

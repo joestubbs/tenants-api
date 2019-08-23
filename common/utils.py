@@ -5,7 +5,7 @@ from flask import jsonify, request
 from werkzeug.exceptions import ClientDisconnected
 from flask_restful import Api
 
-from .config2 import Config
+from .config import conf
 from .errors import BaseTapisError
 
 
@@ -24,7 +24,10 @@ class TapisApi(Api):
 
 
 def handle_error(exc):
-    show_traceback = Config.get('web', 'show_traceback')
+    try:
+        show_traceback = conf.show_traceback
+    except AttributeError:
+        show_traceback = False
     if show_traceback == 'true':
         raise exc
     if isinstance(exc, BaseTapisError):

@@ -8,15 +8,22 @@ networks:
 
 services:
     postgres:
-        image:
+        image: postgres:9.4
+        volumes:
+            - ./db-data:/var/lib/postgresql/data
 
-        ports:
-            - "3306:3306:
+    migrations:
+        image: tapis/tenants-api-migrations
+        volumes:
+            - ./config.json:/home/tapis/config.json
 
-    tenants-api:
+    tenants:
         image: tapis/tenants-api
         ports:
             - "5000:5000"
+        volumes:
+            - ./config.json:/home/tapis/config.json
+            - ./service.log:/home/tapis/service.log
         depends_on:
             - postgres
 
