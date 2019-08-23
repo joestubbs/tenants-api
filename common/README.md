@@ -1,4 +1,4 @@
-# tapiscore
+# tapiscore (tapycore?)
 
 Core Python library for building Tapis v3 APIs. This library provides Python modules, Dockerfiles and build scripts to
 standardize and streamline the development process.
@@ -6,6 +6,8 @@ standardize and streamline the development process.
 ## Getting Started
 
 1. Create a git repository with the following:
+
+```
   + service: directory for API source code.
   + db-data: directory to hold data volume for local db.
   + migrations: directory for migration scripts.
@@ -18,6 +20,7 @@ standardize and streamline the development process.
   - CHANGELOG.md: Tracks releases for the service.
   - README.md: High level description of the service.
   - service.log: Mount into the API container to capture service logs during local development.
+```
 
 2. Edit the Dockerfile:
   FROM: tapis/pybase
@@ -28,10 +31,13 @@ standardize and streamline the development process.
 
 3. Create migration skeleton.
   Migrations are based on the `alembic` package and must be initialized.
+
+```
   $ docker run -it --entrypoint=bash -v $(pwd):/home/tapis/mig tapis/tenants-api
   # inside the container:
   $ cd mig; alembic init migrations
   $ exit
+```
 
 4. Modify the migrations skeleton:
   - Move the `alembic.ini` file into the migrations folder: `mv alembic.ini migrations/`
