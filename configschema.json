@@ -6,6 +6,11 @@
       "type": "string",
       "description": "The name of the service, such as 'apps', 'jobs', etc."
     },
+    "sql_db_url": {
+      "type": "string",
+      "description": "full URL, including protocol and database, to the SQL db.",
+      "default": "postgres://localhost/tenantsAPI"
+    }
+  },
   "required": ["jwt_private_key"]
-  }
 }

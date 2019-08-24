@@ -7,10 +7,12 @@ import json
 import jsonschema
 import os
 
-from errors import BaseTapisError
+from .errors import BaseTapisError
+
+HERE = os.path.dirname(os.path.abspath(__file__))
 
 # load the base api schema -
-schema = json.load(open('configschema.json', 'r'))
+schema = json.load(open(os.path.join(HERE, 'configschema.json'), 'r'))
 
 # try to load an api-specific schema
 service_configschema_path = os.environ.get('TAPIS_CONFIGSCHEMA_PATH', '/home/tapis/configschema.json')
@@ -23,15 +25,46 @@ except Exception as e:
     print(msg)
     raise BaseTapisError(msg)
 
-# we override properties defined in the base schema with properties defined in the service schema
+
+# ----- Combine the service config schema with the base config schema -----
+# In what follows, we take a manual approach, but instead we could also have the service schema use the allOf
+# feature to pull in the base schema; cf., https://github.com/json-schema-org/json-schema-spec/issues/348
+# The downside with that would be that it is up to each service to include the base schema properly.
+
+# 1) we override properties defined in the base schema with properties defined in the service schema
 api_properties = api_schema.get('properties')
 if api_properties and type(api_properties) == dict:
-    schema['properties'] = schema['properties'].update(api_properties)
+    schema['properties'].update(api_properties)
 
-# we extend the required properties with those specified as required by the API -
+# 2) we extend the required properties with those specified as required by the API -
 api_required = api_schema.get('required')
 if api_required and type(api_required) == list:
     schema['required'].extend(api_required)
+
+
+
+# extend the default jsonschema validator to supply/modify the instance with default values supplied in the
+# schema definition. very surprising that this is not the default behavior;
+# see: https://python-jsonschema.readthedocs.io/en/stable/faq/
+def extend_with_default(validator_class):
+    validate_properties = validator_class.VALIDATORS["properties"]
+
+    def set_defaults(validator, properties, instance, schema):
+        for property, subschema in properties.items():
+            if "default" in subschema:
+                instance.setdefault(property, subschema["default"])
+
+        for error in validate_properties(
+            validator, properties, instance, schema,
+        ):
+            yield error
+
+    return jsonschema.validators.extend(
+        validator_class, {"properties" : set_defaults},
+    )
+
+
+DefaultValidatingDraft7Validator = extend_with_default(jsonschema.Draft7Validator)
 
 
 # now that we have the required API config schema, we need to validate it against the actual configs supplied
@@ -58,6 +91,7 @@ class Config(dict):
     def __setattr__(self, key, value):
         self[key] = value
 
+    @classmethod
     def get_config_from_file(self):
         """
         Reads service config from a JSON file
@@ -78,11 +112,12 @@ class Config(dict):
         Load the config from various places, including a JSON file and environment variables.
         :return:
         """
-        file_config = self.get_config_from_file()
+        file_config = cls.get_config_from_file()
         # validate config against schema definition
         try:
-            jsonschema.validate(instance=file_config, schema=schema)
-        except SchemaError as e:
+            # jsonschema.validate(instance=file_config, schema=schema)
+            DefaultValidatingDraft7Validator(schema).validate(file_config)
+        except jsonschema.SchemaError as e:
             msg = f'Invalid service config: exception: {e}'
             print(msg)
             raise BaseTapisError(msg)
