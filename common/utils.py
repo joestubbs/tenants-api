@@ -18,6 +18,7 @@ class RequestParser(reqparse.RequestParser):
         except ClientDisconnected as exc:
             raise BaseTapisError(exc.data['message'], 400)
 
+
 class TapisApi(Api):
     """General flask_restful Api subclass for all the Tapis APIs."""
     pass

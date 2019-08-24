@@ -11,7 +11,7 @@ standardize and streamline the development process.
   + service: directory for API source code.
   + db-data: directory to hold data volume for local db.
   + migrations: directory for migration scripts.
-  - config.json: API config values for local development
+  - config-local.json: API config values for local development
   - configschema.json: jsonschema definition of the API config.
   - Dockerfile: Build recipe for the API service Docker image.
   - Dockerfile-migrations: Build recipe for the API service migrations Docker image.

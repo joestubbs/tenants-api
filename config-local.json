@@ -1,5 +1,5 @@
 {
 
-  "service_name": "tenants-api",
+  "service_name": "tenants",
   "jwt_private_key": "abcd123"
 }
