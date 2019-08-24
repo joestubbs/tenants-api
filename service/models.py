@@ -2,8 +2,9 @@ import enum
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
+from common import conf
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = conf.postgres_url
 db = SQLAlchemy(app)
 
 
@@ -18,9 +19,11 @@ class TenantOwner(db.Model):
     def __repr__(self):
         return f'{self.username}, {self.institution}'
 
+
 class LDAPAccountTypes(enum.Enum):
     user = 'user'
     service = 'service'
+
 
 class LDAPConnection(db.Model):
     __tablename__ = 'ldap_connections'
@@ -30,6 +33,7 @@ class LDAPConnection(db.Model):
     bind_dn = db.Column(db.String(200), unique=True, nullable=False)
     bind_credential = db.Column(db.String(200), unique=True, nullable=False)
     account_type = db.Column(db.Enum(LDAPAccountTypes), unique=False, nullable=False)
+
 
 class Tenant(db.Model):
     __tablename__ = 'tenants'
@@ -42,7 +46,6 @@ class Tenant(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('tenantOwners.id'), nullable=False)
     service_ldap_connection_id = db.Column(db.Integer, db.ForeignKey('ldap_connections.id'), nullable=False))
     user_ldap_connection_id = db.Column(db.Integer, db.ForeignKey('ldap_connections.id'), nullable=False))
-
 
     def __repr__(self):
         return f'{self.tenant_id}: {self.description}'
