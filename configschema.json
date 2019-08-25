@@ -9,7 +9,7 @@
     "sql_db_url": {
       "type": "string",
       "description": "full URL, including protocol and database, to the SQL db.",
-      "default": "postgres://tenants:d3fd6pAssw0rd/postgres/tenants"
+      "default": "postgres://tenants:d3fd6pAssw0rd@postgres:5432/tenants"
     }
   },
   "required": ["jwt_private_key"]

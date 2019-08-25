@@ -1,4 +1,0 @@
-{
-  "service_name": "tenants",
-  "jwt_private_key": "abcd1234"
-}

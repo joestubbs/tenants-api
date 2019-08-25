@@ -35,11 +35,9 @@ standardize and streamline the development process.
 ```
   $ docker run -it --entrypoint=bash -v $(pwd):/home/tapis/mig tapis/tenants-api
   # inside the container:
-  $ cd mig; alembic init migrations
+  $ cd mig; flask db init
+  $ flask db migrate
+  $ flask db upgrade
   $ exit
 ```
-
-4. Modify the migrations skeleton:
-  - Move the `alembic.ini` file into the migrations folder: `mv alembic.ini migrations/`
-  - Update the `sqlalchemy.url` within the `alembic.ini` file to use the
 

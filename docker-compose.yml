@@ -1,16 +1,21 @@
 ---
 
-version: "3.3"
+version: "3.5"
 
 networks:
     tenants:
         driver: bridge
 
+volumes:
+    pgdata:
+
 services:
     postgres:
         image: postgres:9.4
         volumes:
-            - ./db-data:/var/lib/postgresql/data
+            - pgdata:/var/lib/postgresql/data
+        networks:
+            - tenants
 
     migrations:
         image: tapis/tenants-api-migrations

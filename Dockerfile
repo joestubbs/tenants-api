@@ -13,12 +13,14 @@ RUN apt-get update && apt-get install -y vim
 # ----Add the common lib (eventually this will be a pip install)
 COPY common /usr/local/lib/python3.7/site-packages/common
 
-RUN chown -R tapis:tapis /home/tapis
 WORKDIR /home/tapis
-USER tapis
 
 # ----API specific code
 ENV TAPIS_API tenants
+ENV FLASK_APP service/api.py
 COPY configschema.json /home/tapis/configschema.json
 COPY config-local.json /home/tapis/config.json
 COPY service /home/tapis/service
+
+RUN chown -R tapis:tapis /home/tapis
+USER tapis

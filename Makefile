@@ -25,5 +25,16 @@ clean:
 run_dbs: build clean
 	cd $(cwd); docker-compose up -d postgres
 
+# ----- connect to db as root
+connect_db:
+	docker-compose exec postgres psql -Upostgres
+
+# ----- initialize databases; run this target once per database installation
+init_dbs: run_dbs
+	echo "wait for db to start up..."
+	sleep 4
+	docker cp migrations/new_db.sql ${api}-api_postgres_1:/db.sql
+	docker-compose exec postgres psql -Upostgres -f /db.sql
+
 # ----- run migrations
-migrate: run_dbs
+migrate:

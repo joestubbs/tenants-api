@@ -1,11 +1,13 @@
 import enum
 from flask import Flask
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-from common import conf
+from common.config import conf
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = conf.postgres_url
+app.config['SQLALCHEMY_DATABASE_URI'] = conf.sql_db_url
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 
 class TenantOwner(db.Model):
@@ -44,8 +46,8 @@ class Tenant(db.Model):
     security_kernel = db.Column(db.String(2000), unique=True, nullable=False)
     description = db.Column(db.String(1000), unique=False, nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('tenantOwners.id'), nullable=False)
-    service_ldap_connection_id = db.Column(db.Integer, db.ForeignKey('ldap_connections.id'), nullable=False))
-    user_ldap_connection_id = db.Column(db.Integer, db.ForeignKey('ldap_connections.id'), nullable=False))
+    service_ldap_connection_id = db.Column(db.Integer, db.ForeignKey('ldap_connections.id'), nullable=False)
+    user_ldap_connection_id = db.Column(db.Integer, db.ForeignKey('ldap_connections.id'), nullable=False)
 
     def __repr__(self):
         return f'{self.tenant_id}: {self.description}'
