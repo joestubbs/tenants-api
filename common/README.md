@@ -23,7 +23,7 @@ standardize and streamline the development process.
 ```
 
 2. Edit the Dockerfile:
-  FROM: tapis/pybase
+  FROM: tapis/pyapibase
   ENV TAPIS_API <api_name>
   COPY requirements.txt /home/tapis/requirements.txt
   RUN pip install -r /home/tapis/requirements.txt

@@ -19,7 +19,7 @@ build:
 
 # ----- wipe the local environment by removing all containers
 clean:
-	docker rm -f `docker ps -aq` | true
+	docker-compose down
 
 # ----- start databases
 run_dbs: build clean

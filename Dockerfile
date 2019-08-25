@@ -18,9 +18,17 @@ WORKDIR /home/tapis
 # ----API specific code
 ENV TAPIS_API tenants
 ENV FLASK_APP service/api.py
+# set default threads for gunicorn
+ENV threads=3
+
+COPY service_entry.sh /home/tapis/entry.sh
+RUN chmod +x /home/tapis/entry.sh
+
 COPY configschema.json /home/tapis/configschema.json
 COPY config-local.json /home/tapis/config.json
 COPY service /home/tapis/service
 
 RUN chown -R tapis:tapis /home/tapis
 USER tapis
+
+CMD ["./entry.sh"]

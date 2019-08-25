@@ -9,6 +9,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = conf.sql_db_url
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+# import connexion
+# app = connexion.FlaskApp(__name__, specification_dir='resources/')
+# app.app.config['SQLALCHEMY_DATABASE_URI'] = conf.sql_db_url
+# db = SQLAlchemy(app.app)
+# migrate = Migrate(app.app, db)
+
 
 class TenantOwner(db.Model):
     __tablename__ = 'tenantOwners'

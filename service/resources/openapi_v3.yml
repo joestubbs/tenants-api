@@ -1,0 +1,143 @@
+openapi: "3.0.2"
+
+info:
+  title: "Tenants API"
+  description: "Manage Tapis Tenants."
+  version: "1"
+  termsOfService: "https://tapis-project.org"
+  contact:
+    name: "Tenants API"
+    url: "https://tapis-project.org"
+    email: "cicsupport@tacc.utexas.edu"
+  license:
+    name: "BSD 3"
+    url: "https://github.com/tapis-project/tenants-api"
+
+servers:
+- url: http://localhost:5000
+  description: Local Development
+
+#security:
+#  - wso2jwtDevAuth: []
+#  - nonce: []
+
+
+paths:
+  /ldaps:
+    get:
+      tags:
+        - tenants
+        - ldaps
+      operationId: list_ldaps
+      x-swagger-router-controller: connexContr
+      parameters:
+      - name: limit
+        in: query
+        description: limit the number of actors returned.
+        schema:
+          type: integer
+      - name: offset
+        in: query
+        description: index (offset) to start list.
+        schema:
+          type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasicResponse'
+                properties:
+                  result:
+                    $ref: '#/components/schemas/arrayOfLDAPs'
+    post:
+      tags:
+        - tenants
+        - ldaps
+      operationId: create_ldap
+      x-swagger-router-controller: connexContr
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewLDAP'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasicResponse'
+                properties:
+                  result:
+                    $ref: '#/components/schemas/LDAP'
+
+
+components:
+  schemas:
+    BasicResponse:
+      type: object
+      properties:
+        version:
+          type: string
+          description: Version of the API
+        message:
+          type: string
+          description: Brief description of the response
+        status:
+          type: string
+          description: Whether the request was a success or failure.
+          enum: [success, failure]
+
+    NewLDAP:
+      type: object
+      properties:
+        url:
+          type: string
+          description: url to the LDAP
+        user_dn:
+          type: string
+          description: base DN for users
+        bind_dn:
+          type: string
+          description: DN used for binding to the LDAP.
+        bind_credential:
+          type: string
+          description: Pointed to a Tapis credential for binding to the LDAP.
+        account_type:
+          type: string
+          description: Whether this LDAP is used for service accounts or user accounts.
+          enum: [service, user]
+
+
+    LDAP:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique id for the LDAP object
+        url:
+          type: string
+          description: url to the LDAP
+        user_dn:
+          type: string
+          description: base DN for users
+        bind_dn:
+          type: string
+          description: DN used for binding to the LDAP.
+        bind_credential:
+          type: string
+          description: Pointed to a Tapis credential for binding to the LDAP.
+        account_type:
+          type: string
+          description: Whether this LDAP is used for service accounts or user accounts.
+          enum: [service, user]
+
+    arrayOfLDAPs:
+      type: array
+      items:
+        $ref: '#/components/schemas/LDAP'

@@ -20,15 +20,19 @@ services:
     migrations:
         image: tapis/tenants-api-migrations
         volumes:
-            - ./config.json:/home/tapis/config.json
+            - ./config-local.json:/home/tapis/config.json
+        networks:
+            - tenants
 
     tenants:
         image: tapis/tenants-api
         ports:
             - "5000:5000"
         volumes:
-            - ./config.json:/home/tapis/config.json
+            - ./config-local.json:/home/tapis/config.json
             - ./service.log:/home/tapis/service.log
+        networks:
+            - tenants
         depends_on:
             - postgres
 

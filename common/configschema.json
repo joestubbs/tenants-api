@@ -19,6 +19,11 @@
       "default": "ERROR",
       "description": "the logging level to use for the service. "
     },
+    "version": {
+      "type": "string",
+      "description": "The version string for the service, e.g., '3.24.1'.",
+      "default": "dev"
+    },
     "log_file": {
       "type": "string",
       "default": "home/tapis/service.log",

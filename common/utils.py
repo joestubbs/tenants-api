@@ -1,12 +1,14 @@
 import os
 
-import flask.ext.restful.reqparse as reqparse
+# import flask.ext.restful.reqparse as reqparse
 from flask import jsonify, request
 from werkzeug.exceptions import ClientDisconnected
-from flask_restful import Api
+from flask_restful import Api, reqparse
 
 from .config import conf
 from .errors import BaseTapisError
+
+TAG = conf.version
 
 
 class RequestParser(reqparse.RequestParser):
