@@ -37,6 +37,25 @@ Once the First Time Setup has been done a machine, updates can be fetched applie
 directory).migrations
 4. `docker-compose up -d tenants` - start a new version of the Tenats API.
 
+#### New DB Schema
+During initial development, the database schema can be in flux. Changes to the models require new migrations. Instead of
+adding additional migration versions, the database and associated `migrations` directory can be "wiped" and recreated
+from the new models code using the following steps:
+
+1. `make wipe` - removes the database and API container, database volume, and the `migrations` directory.database
+2. `make init_dbs` - creates a new docker volume, `tenant-api_pgdata`, creates a new Postrgres
+Docker container with the volume created, and creates the initial (empty) database and database user.
+3. Add the migrations:
+
+```
+docker run -it --entrypoint=bash --network=tenants-api_tenants -v $(pwd):/home/tapis/mig tapis/tenants-api
+  # inside the container:
+  $ cd mig; flask db init
+  $ flask db migrate
+  $ flask db upgrade
+  $ exit
+```
+
 ### Example Requests
 Use any HTTP client to interact with the running API. The following examples use `curl`.
 
