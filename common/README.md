@@ -33,7 +33,7 @@ standardize and streamline the development process.
   Migrations are based on the `alembic` package and must be initialized.
 
 ```
-  $ docker run -it --entrypoint=bash -v $(pwd):/home/tapis/mig tapis/tenants-api
+  $ docker run -it --entrypoint=bash --network=<service>-api_<service> -v $(pwd):/home/tapis/mig tapis/tenants-api
   # inside the container:
   $ cd mig; flask db init
   $ flask db migrate

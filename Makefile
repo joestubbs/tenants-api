@@ -12,17 +12,23 @@ api=${API_NAME}
 cwd=$(shell pwd)
 
 
-# ----- build all images
-build:
-	cd $(cwd); docker build -t tapis/$(api)-api .; \
-	cd $(cwd); docker build -f Dockerfile-migrations -t tapis/$(api)-api-migrations .;
+# ----- build images
+
+build.api:
+	cd $(cwd); docker build -t tapis/$(api)-api .;
+
+build.migrations:
+	cd $(cwd); docker build -f Dockerfile-migrations -t tapis/$(api)-api-migrations .
+
+build: build.api build.migrations
+
 
 # ----- wipe the local environment by removing all containers
 clean:
 	docker-compose down
 
 # ----- start databases
-run_dbs: build clean
+run_dbs: build.api clean
 	cd $(cwd); docker-compose up -d postgres
 
 # ----- connect to db as root
@@ -33,8 +39,13 @@ connect_db:
 init_dbs: run_dbs
 	echo "wait for db to start up..."
 	sleep 4
-	docker cp migrations/new_db.sql ${api}-api_postgres_1:/db.sql
+	docker cp new_db.sql ${api}-api_postgres_1:/db.sql
 	docker-compose exec postgres psql -Upostgres -f /db.sql
+
+# ----- wipe database and associated data
+wipe: clean
+	docker volume rm $(api)-api_pgdata
+	rm -rf migrations
 
 # ----- run migrations
 migrate:

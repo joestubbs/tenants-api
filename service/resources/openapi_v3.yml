@@ -42,7 +42,7 @@ paths:
         schema:
           type: integer
       responses:
-        200:
+        '200':
           description: OK
           content:
             application/json:
@@ -65,7 +65,7 @@ paths:
             schema:
               $ref: '#/components/schemas/NewLDAP'
       responses:
-        201:
+        '201':
           description: Created
           content:
             application/json:
@@ -96,6 +96,9 @@ components:
     NewLDAP:
       type: object
       properties:
+        name:
+          type: string
+          description: A name for this ldap object; must be unique.
         url:
           type: string
           description: url to the LDAP
@@ -112,6 +115,7 @@ components:
           type: string
           description: Whether this LDAP is used for service accounts or user accounts.
           enum: [service, user]
+      required: [name, url, user_dn, bind_dn, bind_credential, account_type]
 
 
     LDAP:
@@ -120,6 +124,9 @@ components:
         id:
           type: integer
           description: Unique id for the LDAP object
+        name:
+          type: string
+          description: A name for this ldap object; unique across the tenants API.
         url:
           type: string
           description: url to the LDAP

@@ -32,15 +32,36 @@ class LDAPAccountTypes(enum.Enum):
     user = 'user'
     service = 'service'
 
+    def __repr__(self):
+        if self.user:
+            return 'user'
+        return 'service'
+
+    @property
+    def serialize(self):
+        return str(self)
+
 
 class LDAPConnection(db.Model):
     __tablename__ = 'ldap_connections'
     id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(2000), unique=True, nullable=False)
-    user_dn = db.Column(db.String(200), unique=True, nullable=False)
-    bind_dn = db.Column(db.String(200), unique=True, nullable=False)
-    bind_credential = db.Column(db.String(200), unique=True, nullable=False)
+    name = db.Column(db.String(2000), unique=True, nullable=False)
+    url = db.Column(db.String(2000), unique=False, nullable=False)
+    user_dn = db.Column(db.String(200), unique=False, nullable=False)
+    bind_dn = db.Column(db.String(200), unique=False, nullable=False)
+    bind_credential = db.Column(db.String(200), unique=False, nullable=False)
     account_type = db.Column(db.Enum(LDAPAccountTypes), unique=False, nullable=False)
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'url': self.url,
+            'bind_dn': self.bind_dn,
+            'bind_credential': self.bind_credential,
+            'account_type': self.account_type.serialize,
+        }
 
 
 class Tenant(db.Model):

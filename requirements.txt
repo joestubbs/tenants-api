@@ -8,5 +8,7 @@ alembic==1.0.10
 psycopg2==2.8.2
 requests==2.22.0
 gunicorn==19.9.0
+PyYAML
 jsonschema
 flask-cors
+openapi-core

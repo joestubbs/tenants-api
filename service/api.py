@@ -5,9 +5,9 @@ from flask_migrate import Migrate, MigrateCommand
 from common.config import conf
 from common.utils import TapisApi, handle_error
 
-from controllers import LDAPsResource
-from errors import errors
-from models import db, app
+from service.controllers import LDAPsResource
+from service.errors import errors
+from service.models import db, app
 
 # db and migrations ----
 db.init_app(app)
