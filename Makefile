@@ -48,4 +48,6 @@ wipe: clean
 	rm -rf migrations
 
 # ----- run migrations
-migrate:
+migrate.upgrade: build.migrations
+	docker-compose run --rm migrations upgrade
+	
