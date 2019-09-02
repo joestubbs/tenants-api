@@ -85,7 +85,7 @@ $ curl localhost:5000/owners -H "content-type: application/json" -d '{"name": "J
 }
 
 ```
-We can list the owners by making a `GET` request to `/owner`, and we can retrieve details about
+We can list the owners by making a `GET` request to `/owners`, and we can retrieve details about
 an owner using the owner's email address; for example:
 
 ```
@@ -120,13 +120,13 @@ curl localhost:5000/owners/jstubbs@tacc.utexas.edu | jq
 #### Work With LDAP Objects
 
 LDAP objects represent collections of accounts on remote LDAP servers, together with connection
-information detailing how bind to the LDAP. Two types of LDAP objects are supported: `user` and
+information detailing how to bind to the LDAP. Two types of LDAP objects are supported: `user` and
 `service`. These types correspond to the two types of accounts in any Tapis tenant.
  
 LDAP objects also require a `bind_credential`. This is a reference to a credential that
 is retrievable from the Tapis Security Kernel.
 
-We will create two LDAP objects for the TACC tenant, once for user accounts and one for
+We will create two LDAP objects for the TACC tenant, one for user accounts and one for
 service accounts. First we create the service account ldap:
 
 ```
@@ -168,7 +168,7 @@ $ curl localhost:5000/ldaps -H "content-type: application/json" -d '{"url":"ldap
 ```
 
 Just as with the `/owners` collection and we can list all LDAP objects and get details about
-specific LDAP objects using the natural GET methods. For example,
+specific LDAP objects using the usual GET requests. For example,
 
 ```
 curl localhost:5000/ldaps/tacc-all | jq
