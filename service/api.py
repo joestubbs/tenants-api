@@ -5,7 +5,8 @@ from flask_migrate import Migrate, MigrateCommand
 from common.config import conf
 from common.utils import TapisApi, handle_error
 
-from service.controllers import LDAPsResource
+from service.controllers import LDAPsResource, LDAPResource, OwnersResource, OwnerResource, TenantsResource, \
+    TenantResource
 from service.errors import errors
 from service.models import db, app
 
@@ -38,7 +39,13 @@ api.handle_user_exception = handle_error
 
 # Add resources
 api.add_resource(LDAPsResource, '/ldaps')
+api.add_resource(LDAPResource, '/ldaps/<ldap_id>')
 
+api.add_resource(OwnersResource, '/owners')
+api.add_resource(OwnerResource, '/owners/<email>')
+
+api.add_resource(TenantsResource, '/tenants')
+api.add_resource(TenantResource, '/tenants/<tenant_id>')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
