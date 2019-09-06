@@ -1,8 +1,5 @@
-from flask import Flask
-from flask_cors import CORS
-from flask_migrate import Migrate, MigrateCommand
+from flask_migrate import Migrate
 
-from common.config import conf
 from common.utils import TapisApi, handle_error
 
 from service.controllers import LDAPsResource, LDAPResource, OwnersResource, OwnerResource, TenantsResource, \

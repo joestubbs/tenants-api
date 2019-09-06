@@ -1,4 +1,4 @@
-from common import utils
+from flaskbase.common import utils
 from models import LDAPConnection
 
 def list_ldaps(limit=None, offset=None):
