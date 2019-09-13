@@ -1,20 +1,12 @@
-import os
 
 from flask import request
 from flask_restful import Resource
-import yaml
+from openapi_core.shortcuts import RequestValidator
+from openapi_core.wrappers.flask import FlaskOpenAPIRequest
 
-# from flasgger import swag_from
 from common import utils, errors
 from service.models import db, LDAPConnection, TenantOwner, Tenant
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-
-from openapi_core import create_spec
-from openapi_core.shortcuts import RequestValidator
-from openapi_core.wrappers.flask import FlaskOpenAPIRequest
-spec_dict = yaml.load(open(os.path.join(HERE, 'resources', 'openapi_v3.yml'), 'r'))
-spec = create_spec(spec_dict)
 
 class LDAPsResource(Resource):
     """
@@ -27,7 +19,7 @@ class LDAPsResource(Resource):
         return utils.ok(result=[l.serialize for l in ldaps], msg="LDAPs retrieved successfully.")
 
     def post(self):
-        validator = RequestValidator(spec)
+        validator = RequestValidator(utils.spec)
         result = validator.validate(FlaskOpenAPIRequest(request))
         if result.errors:
             raise errors.ResourceError(msg=f'Invalid POST data: {result.errors}.')
@@ -75,7 +67,7 @@ class OwnersResource(Resource):
         return utils.ok(result=[o.serialize for o in owners], msg="Owners retrieved successfully.")
 
     def post(self):
-        validator = RequestValidator(spec)
+        validator = RequestValidator(utils.spec)
         result = validator.validate(FlaskOpenAPIRequest(request))
         if result.errors:
             raise errors.ResourceError(msg=f'Invalid POST data: {result.errors}.')
@@ -120,7 +112,7 @@ class TenantsResource(Resource):
         return utils.ok(result=[t.serialize for t in tenants], msg="Tenants retrieved successfully.")
 
     def post(self):
-        validator = RequestValidator(spec)
+        validator = RequestValidator(utils.spec)
         result = validator.validate(FlaskOpenAPIRequest(request))
         if result.errors:
             raise errors.ResourceError(msg=f'Invalid POST data: {result.errors}.')

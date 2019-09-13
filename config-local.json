@@ -1,5 +1,6 @@
 {
 
   "service_name": "tenants",
-  "jwt_private_key": "abcd123"
+  "tenants": ["*"],
+  "use_sk": false
 }

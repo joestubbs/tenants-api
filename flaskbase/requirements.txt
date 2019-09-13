@@ -12,3 +12,5 @@ PyYAML
 jsonschema
 flask-cors
 openapi-core
+pyjwt
+pycrypto==2.6.1

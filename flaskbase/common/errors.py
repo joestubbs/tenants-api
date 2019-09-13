@@ -15,23 +15,27 @@ class BaseTapisError(Exception):
 
 class ServiceConfigError(BaseTapisError):
     """Error parsing service configuration."""
-    def __init__(self, msg=None, code=500):
-        super(ServiceConfigError, self).__init__(msg=msg, code=code)
+    pass
+
+
+class NoTokenError(BaseTapisError):
+    """No access token passed in the request."""
+    pass
+
+
+class AuthenticationError(BaseTapisError):
+    """Error validating access token."""
+    pass
 
 
 class PermissionsError(BaseTapisError):
     """Error checking permissions or insufficient permissions needed to perform the action."""
-    def __init__(self, msg=None, code=404):
-        super(PermissionsError, self).__init__(msg=msg, code=code)
-
+    pass
 
 class DAOError(BaseTapisError):
     """General error accessing or serializing database objects."""
-    def __init__(self, msg=None, code=404):
-        super(DAOError, self).__init__(msg=msg, code=code)
-
+    pass
 
 class ResourceError(BaseTapisError):
     """General error in the API resource layer."""
-    def __init__(self, msg=None, code=404):
-        super(ResourceError, self).__init__(msg=msg, code=code)
+    pass

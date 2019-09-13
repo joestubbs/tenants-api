@@ -2,15 +2,10 @@
   "$id": "http://github.com/tapis-project/tenants-api/tenants-api/configschema.json",
   "$schema": "http://json-schema.org/schema#",
   "properties": {
-    "jwt_private_key": {
-      "type": "string",
-      "description": "The name of the service, such as 'apps', 'jobs', etc."
-    },
     "sql_db_url": {
       "type": "string",
       "description": "full URL, including protocol and database, to the SQL db.",
       "default": "postgres://tenants:d3fd6pAssw0rd@postgres:5432/tenants"
     }
-  },
-  "required": ["jwt_private_key"]
+  }
 }

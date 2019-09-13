@@ -26,9 +26,31 @@
     },
     "log_file": {
       "type": "string",
-      "default": "home/tapis/service.log",
+      "default": "/home/tapis/service.log",
       "description": "location of log file."
+    },
+    "tenants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "The list of tenants that this service will serve requests for."
+    },
+    "use_sk": {
+      "type": "boolean",
+      "description": "Whether this tokens service should use an external Tapis Security Kernel for its auth. NOTE: This should always be TRUE in production",
+      "default": true
+    },
+    "dev_jwt_public_key": {
+      "type": "string",
+      "description": "The public key associated with the private key to use for signing JWTs in dev mode. NOTE: This should NOT be used in production",
+      "default": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDIJjZ0df27gPqk0fC+fZwsUhQTxJwM7/BMkviQ4t7nqWdoammekFpYT6cLxa0XoHV6KapGX8exItgSyTxkaIm2jj/nSqpNG10osp79lPfut0f1Trgxe4HXxMk5jk+xN/8VzMciT/KNBmBMzCNc7WZzjqtrZWz1MAYe6rnRwykuTw== jstubbs@jstubbs-XPS-15-9530"
+    },
+    "dev_iss": {
+      "type": "string",
+      "description": "The URL to use for the 'iss' claim in dev mode. NOTE: This should NOT be used in production",
+      "default": "https://dev.api.tapis.io/tokens/v3"
     }
   },
-  "required": ["service_name"]
+  "required": ["service_name", "tenants"]
 }

@@ -1,10 +1,9 @@
 from flask_migrate import Migrate
 
-from common.utils import TapisApi, handle_error
+from common.utils import TapisApi, handle_error, flask_errors_dict
 
 from service.controllers import LDAPsResource, LDAPResource, OwnersResource, OwnerResource, TenantsResource, \
     TenantResource
-from service.errors import errors
 from service.models import db, app
 
 # db and migrations ----
@@ -27,7 +26,7 @@ migrate = Migrate(app, db)
 # Swagger(app)
 
 # flask restful API object ----
-api = TapisApi(app, errors=errors)
+api = TapisApi(app, errors=flask_errors_dict)
 
 # Set up error handling
 api.handle_error = handle_error
