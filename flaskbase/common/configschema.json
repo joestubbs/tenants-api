@@ -44,7 +44,7 @@
     "dev_jwt_public_key": {
       "type": "string",
       "description": "The public key associated with the private key to use for signing JWTs in dev mode. NOTE: This should NOT be used in production",
-      "default": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDIJjZ0df27gPqk0fC+fZwsUhQTxJwM7/BMkviQ4t7nqWdoammekFpYT6cLxa0XoHV6KapGX8exItgSyTxkaIm2jj/nSqpNG10osp79lPfut0f1Trgxe4HXxMk5jk+xN/8VzMciT/KNBmBMzCNc7WZzjqtrZWz1MAYe6rnRwykuTw== jstubbs@jstubbs-XPS-15-9530"
+      "default": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJtGvK8P6tP+K35PIxh713Vw0ZecWNaK31Lkz7aSJJYKNZ4gpgS+5+5bRZCzoNs3DSho3wh2g6sipnvOzo35bIo2Pb6SJ3rk3/PJ6SsyR0bh0NF7oSDGVJvNCImZAWRXxh5HENnsfMxJZrVQR9ZDQaaZ9awccX9S2L2WVMMniZMwIDAQAB\n-----END PUBLIC KEY-----"
     },
     "dev_iss": {
       "type": "string",

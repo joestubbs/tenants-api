@@ -95,7 +95,7 @@ def authentication(authn_callback=None):
 
     """
     add_headers()
-    validate_token()
+    validate_request_token()
 
 def authorization(authz_callback=None):
     """Entry point for authorization. Use as follows:
@@ -137,9 +137,10 @@ def add_headers():
     # access token has been revoked.
     g.x_tapis_user_token_hash = request.headers.get('X-Tapis-User-Token-Hash')
 
-def validate_token():
+
+def validate_request_token():
     """
-    Attempts to validate the Tapis access token based on the public key and signature in the JWT.
+    Attempts to validate the Tapis access token in the request based on the public key and signature in the JWT.
     This function raises
         - NoTokenError - if no token is present in the request.
         - AuthenticationError - if validation is not successful.
@@ -147,28 +148,46 @@ def validate_token():
     """
     if not g.x_tapis_token:
         raise errors.NoTokenError("No access token found in the request.")
+    claims = validate_token(g.x_tapis_token)
+    g.token_claims = claims
+    g.username = claims.get('username')
+    g.tenant_id = claims.get('tenant_id')
+    g.account_type = claims.get('account_type')
+    g.delegation = claims.get('delegation')
+
+
+def validate_token(token):
+    """
+    Stand-alone function to validate a Tapis token. 
+    :param token: 
+    :return: 
+    """
     # first, decode the token data to determine the tenant associated with the token. We are not able to
     # check the signature until we know which tenant, and thus, which public key, to use for validation.
     try:
-        data = jwt.decode(g.x_tapis_token, verify=False)
+        data = jwt.decode(token, verify=False)
     except Exception as e:
         logger.debug(f"got exception trying to parse data from the access_token jwt; exception: {e}")
         raise errors.AuthenticationError("could not parse the access token.")
     # get the tenant out of the jwt payload and get associated public key
-    access_token_tenant_id = data['tenant_id']
+    token_tenant_id = data['tenant_id']
     try:
-        public_key_str = get_tenant_config(access_token_tenant_id)['public_key']
+        public_key_str = get_tenant_config(token_tenant_id)['public_key']
     except errors.BaseTapisError:
-        raise errors.AuthenticationError("Unable to process Tapis access_token; unexpected tenant_id.")
+        raise errors.AuthenticationError("Unable to process Tapis token; unexpected tenant_id.")
     except KeyError:
-        raise errors.AuthenticationError("Unable to process Tapis access_token; not public key associated with the "
+        raise errors.AuthenticationError("Unable to process Tapis token; no public key associated with the "
                                          "tenant_id.")
+    # try:
+    #     pub_key = get_pub_rsa_key(public_key_str)
+    # except Exception as e:
+    #     logger.error(f"got exception trying to create public RSA key object; e: {e} ")
+    #     raise errors.ServiceConfigError("Unable to process public key associated with tenant.")
     try:
-        pub_key = get_pub_rsa_key(public_key_str)
+        return jwt.decode(token, public_key_str, algorithm='RS256')
     except Exception as e:
-        logger.error(f"got exception trying to create public RSA key object; e: {e} ")
-        raise errors.ServiceConfigError("Unable to process public key associated with tenant.")
-
+        logger.debug(f"Got exception trying to decode token; exception: {e}")
+        raise errors.AuthenticationError("Invalid Tapis token.")
 
 def get_pub_rsa_key(pub_key):
     """
@@ -176,4 +195,4 @@ def get_pub_rsa_key(pub_key):
     :param pub_key:
     :return:
     """
-    return RSA.importKey(base64.b64decode(pub_key))
+    return RSA.importKey(pub_key)
