@@ -1,3 +1,8 @@
+
+# -----------------------------------------------------
+# MOVED TO https://github.com/tapis-project/tenants-api
+# -----------------------------------------------------
+
 # Tapis Tenants API
 
 REST API for managing tenants associated with a Tapis instance.
